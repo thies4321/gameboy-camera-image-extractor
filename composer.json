@@ -1,0 +1,35 @@
+{
+    "name": "thies/gameboy-camera-image-extractor",
+    "description": "This is a PHP library for extracting Game Boy Camera photos from a save ram (.sav) file and writing them in the PNG format.",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Thies Verhave"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.45",
+        "phpunit/phpunit": "^11.5",
+        "psy/psysh": "^0.12.7"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "GameboyCameraImageExtractor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GameboyCameraImageExtractor\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        }
+    }
+}
