@@ -24,8 +24,7 @@ final class ImageExtractorTest extends TestCase
 
     public function testGetImages() : void
     {
-        $saveData = $this->imageExtractor->unpackSaveData(file_get_contents(__DIR__ . '/../Fixtures/test.sav'));
-        $images = $this->imageExtractor->getImages($saveData);
+        $images = $this->imageExtractor->extract(__DIR__ . '/../Fixtures/test.sav');
 
         foreach ($images as $key => $image) {
             $testImagePath = sprintf('%s/../Fixtures/images/png/output_%d.png', __DIR__, ($key + 1));

@@ -6,9 +6,14 @@ namespace GameboyCameraImageExtractor;
 
 use GameboyCameraImageExtractor\Entity\Palette;
 use GameboyCameraImageExtractor\Enum\PalettePreset;
+use GameboyCameraImageExtractor\Exception\FileNotFound;
 use GameboyCameraImageExtractor\Exception\InvalidColorCode;
+use GameboyCameraImageExtractor\Exception\InvalidFileSize;
 use GdImage;
 
+use function file_exists;
+use function file_get_contents;
+use function filesize;
 use function floor;
 use function hexdec;
 use function imagecolorallocate;
@@ -155,5 +160,29 @@ final readonly class ImageExtractor
     public function unpackSaveData(string $saveData): array
     {
         return unpack('x/c*', $saveData);
+    }
+
+    /**
+     * @return GdImage[]
+     *
+     * @throws FileNotFound
+     * @throws InvalidColorCode
+     * @throws InvalidFileSize
+     */
+    public function extract(string $filePath, ?Palette $palette = null): array
+    {
+        if (! file_exists($filePath)) {
+            throw FileNotFound::forPath($filePath);
+        }
+
+        $fileSize = (int) filesize($filePath);
+
+        if ($fileSize !== ImageExtractor::SAVE_FILE_SIZE) {
+            throw InvalidFileSize::forFileSize($fileSize);
+        }
+
+        $contents = $this->unpackSaveData(file_get_contents($filePath));
+
+        return $this->getImages($contents, $palette);
     }
 }

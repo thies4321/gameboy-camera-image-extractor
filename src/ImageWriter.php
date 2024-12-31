@@ -26,37 +26,13 @@ final readonly class ImageWriter
     }
 
     /**
-     * @return GdImage[]
-     *
-     * @throws FileNotFound
-     * @throws InvalidColorCode
-     * @throws InvalidFileSize
-     */
-    public function extract(string $filePath, ?Palette $palette = null): array
-    {
-        if (! file_exists($filePath)) {
-            throw FileNotFound::forPath($filePath);
-        }
-
-        $fileSize = (int) filesize($filePath);
-
-        if ($fileSize !== ImageExtractor::SAVE_FILE_SIZE) {
-            throw InvalidFileSize::forFileSize($fileSize);
-        }
-
-        $contents = $this->imageExtractor->unpackSaveData(file_get_contents($filePath));
-
-        return $this->imageExtractor->getImages($contents, $palette);
-    }
-
-    /**
      * @throws FileNotFound
      * @throws InvalidColorCode
      * @throws InvalidFileSize
      */
     public function extractAndStoreToDisk(string $filePath, ?string $outputDirectory = null, ?Palette $palette = null): void
     {
-        $images = $this->extract($filePath, $palette);
+        $images = $this->imageExtractor->extract($filePath, $palette);
 
         foreach ($images as $key => $image) {
             $fileName = sprintf('output_%d', ($key + 1));
