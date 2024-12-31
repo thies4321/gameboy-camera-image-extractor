@@ -26,7 +26,7 @@ final readonly class Palette
         };
     }
 
-    public static function getForPreset(?PalettePreset $preset = null): self
+    public static function createForPreset(?PalettePreset $preset = null): self
     {
         if (! $preset instanceof PalettePreset) {
             $preset = PalettePreset::BlackAndWhite;
