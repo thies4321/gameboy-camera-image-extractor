@@ -7,6 +7,7 @@ namespace GameboyCameraImageExtractor\Writer;
 use GdImage;
 
 use function fopen;
+use function imagewebp;
 
 final class Webp extends Writer
 {

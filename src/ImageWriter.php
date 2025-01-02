@@ -10,11 +10,7 @@ use GameboyCameraImageExtractor\Exception\InvalidColorCode;
 use GameboyCameraImageExtractor\Exception\InvalidFileSize;
 use GameboyCameraImageExtractor\Writer\Png;
 use GameboyCameraImageExtractor\Writer\Writer;
-use GdImage;
 
-use function file_exists;
-use function file_get_contents;
-use function filesize;
 use function sprintf;
 
 final readonly class ImageWriter

@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace GameboyCameraImageExtractor\Tests;
 
+use GameboyCameraImageExtractor\Exception\FileNotFound;
+use GameboyCameraImageExtractor\Exception\InvalidColorCode;
+use GameboyCameraImageExtractor\Exception\InvalidFileSize;
 use GameboyCameraImageExtractor\ImageExtractor;
 use PHPUnit\Framework\TestCase;
+
 use function base64_encode;
 use function imagetruecolortopalette;
 use function ob_get_contents;
 use function ob_start;
 use function sprintf;
-use function var_dump;
 
 final class ImageExtractorTest extends TestCase
 {
@@ -22,6 +25,12 @@ final class ImageExtractorTest extends TestCase
         $this->imageExtractor = new ImageExtractor();
     }
 
+    /**
+     * @return void
+     * @throws FileNotFound
+     * @throws InvalidColorCode
+     * @throws InvalidFileSize
+     */
     public function testGetImages() : void
     {
         $images = $this->imageExtractor->extract(__DIR__ . '/../Fixtures/test.sav');

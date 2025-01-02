@@ -7,6 +7,7 @@ namespace GameboyCameraImageExtractor\Writer;
 use GdImage;
 
 use function fopen;
+use function imagegif;
 use function imagetruecolortopalette;
 
 final class Gif extends Writer

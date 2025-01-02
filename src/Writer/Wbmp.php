@@ -8,6 +8,7 @@ use GdImage;
 
 use function fopen;
 use function imagetruecolortopalette;
+use function imagewbmp;
 
 final class Wbmp extends Writer
 {

@@ -7,6 +7,7 @@ namespace GameboyCameraImageExtractor\Writer;
 use GdImage;
 
 use function fopen;
+use function imagejpeg;
 use function imagetruecolortopalette;
 
 final class Jpeg extends Writer
