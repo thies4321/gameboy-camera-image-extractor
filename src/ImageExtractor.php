@@ -100,9 +100,7 @@ final readonly class ImageExtractor
                         $val += 2;
                     }
 
-                    $ding = $x * 8 + $i;
-
-                    $imageData[$y][$ding] = $val;
+                    $imageData[$y][($x * 8 + $i)] = $val;
                 }
             }
         }
