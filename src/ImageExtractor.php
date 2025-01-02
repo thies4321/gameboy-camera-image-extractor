@@ -121,6 +121,7 @@ final readonly class ImageExtractor
 
     /**
      * @return GdImage[]
+     *
      * @throws InvalidColorCode
      */
     public function getImages(array $saveData, ?Palette $palette = null): array
