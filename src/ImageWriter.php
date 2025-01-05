@@ -28,7 +28,7 @@ final readonly class ImageWriter
      */
     public function extractAndStoreToDisk(string $filePath, ?string $outputDirectory = null, ?Palette $palette = null): void
     {
-        $images = $this->imageExtractor->extract($filePath, $palette);
+        $images = $this->imageExtractor->extractFromFile($filePath, $palette);
 
         foreach ($images as $key => $image) {
             $fileName = sprintf('output_%d', ($key + 1));

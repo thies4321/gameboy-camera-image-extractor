@@ -124,7 +124,7 @@ final readonly class ImageExtractor
      *
      * @throws InvalidColorCode
      */
-    public function getImages(array $saveData, ?Palette $palette = null): array
+    public function extractImages(array $saveData, ?Palette $palette = null): array
     {
         if (! $palette instanceof Palette) {
             $palette = Palette::createForPreset(PalettePreset::BlackAndWhite);
@@ -168,7 +168,7 @@ final readonly class ImageExtractor
      * @throws InvalidColorCode
      * @throws InvalidFileSize
      */
-    public function extract(string $filePath, ?Palette $palette = null): array
+    public function extractFromFile(string $filePath, ?Palette $palette = null): array
     {
         if (! file_exists($filePath)) {
             throw FileNotFound::forPath($filePath);
@@ -182,6 +182,6 @@ final readonly class ImageExtractor
 
         $contents = $this->unpackSaveData(file_get_contents($filePath));
 
-        return $this->getImages($contents, $palette);
+        return $this->extractImages($contents, $palette);
     }
 }

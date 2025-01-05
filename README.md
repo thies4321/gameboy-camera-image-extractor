@@ -3,6 +3,8 @@ This is a PHP library for extracting Game Boy Camera photos from a save ram (.sa
 
 The library requires the GD php extension to work.
 
+To see it in action go to https://gbcamera.net
+
 ## Basic usage
 
 To just extract the images and store them on disk use the image writer:
@@ -27,7 +29,7 @@ If you want to get the images without writing them to disk you can use the image
 
 ```php
 $imageExtractor = new \GameboyCameraImageExtractor\ImageExtractor();
-$imageExtractor->extract('/path/to/file.sav');
+$imageExtractor->extractFromFile('/path/to/file.sav');
 ```
 
 This will return an array of `\GdImage` objects.

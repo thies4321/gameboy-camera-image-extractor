@@ -33,7 +33,7 @@ final class ImageExtractorTest extends TestCase
      */
     public function testGetImages() : void
     {
-        $images = $this->imageExtractor->extract(__DIR__ . '/../Fixtures/test.sav');
+        $images = $this->imageExtractor->extractFromFile(__DIR__ . '/../Fixtures/test.sav');
 
         foreach ($images as $key => $image) {
             $testImagePath = sprintf('%s/../Fixtures/images/png/output_%d.png', __DIR__, ($key + 1));
