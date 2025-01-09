@@ -2,6 +2,11 @@
 
 All notable changes to this library will be documented in this file.
 
+## 1.1.1 - 09-01-2025
+
+- Add option to recover delete images
+- Minor codestyle changes
+
 ## 1.1.0 - 05-01-2025
 
 - Added the default gameboy color palettes to the PalettePreset enum

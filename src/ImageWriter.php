@@ -26,9 +26,13 @@ final readonly class ImageWriter
      * @throws InvalidColorCode
      * @throws InvalidFileSize
      */
-    public function extractAndStoreToDisk(string $filePath, ?string $outputDirectory = null, ?Palette $palette = null): void
-    {
-        $images = $this->imageExtractor->extractFromFile($filePath, $palette);
+    public function extractAndStoreToDisk(
+        string $filePath,
+        ?string $outputDirectory = null,
+        ?Palette $palette = null,
+        bool $includeDeletedImages = false,
+    ): void {
+        $images = $this->imageExtractor->extractFromFile($filePath, $palette, $includeDeletedImages);
 
         foreach ($images as $key => $image) {
             $fileName = sprintf('output_%d', ($key + 1));

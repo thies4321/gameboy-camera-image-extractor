@@ -15,7 +15,8 @@
     "require-dev": {
         "ergebnis/composer-normalize": "^2.45",
         "phpunit/phpunit": "^11.5",
-        "psy/psysh": "^0.12.7"
+        "psy/psysh": "^0.12.7",
+        "phpstan/phpstan": "^2.1"
     },
     "minimum-stability": "stable",
     "autoload": {

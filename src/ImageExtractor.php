@@ -43,31 +43,21 @@ final readonly class ImageExtractor
 
         if (preg_match(self::HEX_COLOR_PCRE, $color)) {
             if (strlen($color) === 4) {
-                $r = hexdec($color[1] . $color[1]);
-                $g = hexdec($color[2] . $color[2]);
-                $b = hexdec($color[3] . $color[3]);
-            } else {
-                $r = hexdec(substr($color, 1, 2));
-                $g = hexdec(substr($color, 3, 2));
-                $b = hexdec(substr($color, 5, 2));
+                return [hexdec($color[1] . $color[1]), hexdec($color[2] . $color[2]), hexdec($color[3] . $color[3])];
             }
-        } elseif (preg_match(self::RGB_COLOR_PCRE, $color, $matches)) {
-            $r = intval($matches[1]);
-            $g = intval($matches[2]);
-            $b = intval($matches[3]);
-        } elseif (preg_match(self::RGB_PERCENT_COLOR_PCRE, $color, $matches)) {
-            $r = intval($matches[1] * 2.55);
-            $g = intval($matches[2] * 2.55);
-            $b = intval($matches[3] * 2.55);
-        } else {
-            throw InvalidColorCode::fromCode($color);
+
+            return [hexdec(substr($color, 1, 2)), hexdec(substr($color, 3, 2)), hexdec(substr($color, 5, 2))];
         }
 
-        return [
-            'red' => $r,
-            'green' => $g,
-            'blue' => $b
-        ];
+        if (preg_match(self::RGB_COLOR_PCRE, $color, $matches)) {
+            return [intval($matches[1]), intval($matches[2]), intval($matches[3])];
+        }
+
+        if (preg_match(self::RGB_PERCENT_COLOR_PCRE, $color, $matches)) {
+            return [intval($matches[1] * 2.55), intval($matches[2] * 2.55), intval($matches[3] * 2.55)];
+        }
+
+        throw InvalidColorCode::fromCode($color);
     }
 
     private function getTileIndex($base, $tile_id): float|int
@@ -96,6 +86,7 @@ final readonly class ImageExtractor
                     if (($saveData[$p] & (0x80 >> $i)) != 0) {
                         $val += 1;
                     }
+
                     if (($saveData[$p + 1] & (0x80 >> $i)) != 0) {
                         $val += 2;
                     }
@@ -124,7 +115,7 @@ final readonly class ImageExtractor
      *
      * @throws InvalidColorCode
      */
-    public function extractImages(array $saveData, ?Palette $palette = null): array
+    public function extractImages(array $saveData, ?Palette $palette = null, bool $includeDeletedImages = false): array
     {
         if (! $palette instanceof Palette) {
             $palette = Palette::createForPreset(PalettePreset::BlackAndWhite);
@@ -133,10 +124,10 @@ final readonly class ImageExtractor
         $images = [];
 
         for ($photo = 0; $photo < 30; $photo++) {
-            $isActive = $this->isPhotoActive($saveData, $photo);
-
-            if ($isActive === false) {
-                continue;
+            if ($includeDeletedImages === false) {
+                if ($this->isPhotoActive($saveData, $photo) === false) {
+                    continue;
+                }
             }
 
             $imageData = $this->photoToImageData($saveData, $photo);
@@ -145,7 +136,7 @@ final readonly class ImageExtractor
             foreach($imageData as $rowId => $row) {
                 foreach($row as $position => $pixel) {
                     $rgb = $this->resolveColor($palette->getColorForPixelType($pixel));
-                    $colorIdentifier = imagecolorallocate($image, $rgb['red'], $rgb['green'], $rgb['blue']);
+                    $colorIdentifier = imagecolorallocate($image, $rgb[0], $rgb[1], $rgb[2]);
                     imagesetpixel($image, $position, $rowId, $colorIdentifier);
                 }
             }
@@ -168,13 +159,16 @@ final readonly class ImageExtractor
      * @throws InvalidColorCode
      * @throws InvalidFileSize
      */
-    public function extractFromFile(string $filePath, ?Palette $palette = null): array
-    {
+    public function extractFromFile(
+        string $filePath,
+        ?Palette $palette = null,
+        bool $includeDeletedImages = false
+    ): array {
         if (! file_exists($filePath)) {
             throw FileNotFound::forPath($filePath);
         }
 
-        $fileSize = (int) filesize($filePath);
+        $fileSize = filesize($filePath);
 
         if ($fileSize !== ImageExtractor::SAVE_FILE_SIZE) {
             throw InvalidFileSize::forFileSize($fileSize);
@@ -182,6 +176,6 @@ final readonly class ImageExtractor
 
         $contents = $this->unpackSaveData(file_get_contents($filePath));
 
-        return $this->extractImages($contents, $palette);
+        return $this->extractImages($contents, $palette, $includeDeletedImages);
     }
 }
